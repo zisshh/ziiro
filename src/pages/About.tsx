@@ -25,36 +25,26 @@ const About = () => {
         </AnimatedSection>
 
         {/* Who We Are */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
-          <AnimatedSection>
-            <GlassCard hover={false} className="h-full">
-              <h2 className="text-2xl font-bold text-foreground mb-4">Who We Are</h2>
-              <p className="text-muted-alpha text-sm mb-6">
-                Ziiro is a forward-thinking AI automation agency that helps businesses streamline operations, reduce costs, and scale intelligently. We combine deep technical expertise with business acumen to deliver solutions that generate real ROI.
-              </p>
-              <h3 className="text-lg font-semibold text-foreground mb-2">Our Mission</h3>
-              <p className="text-muted-alpha text-sm mb-6">
-                To democratize AI automation and empower businesses of all sizes to operate at peak efficiency.
-              </p>
-              <h3 className="text-lg font-semibold text-foreground mb-3">Our Values</h3>
-              <div className="space-y-2">
-                {["Innovation First", "Client Success", "Transparency"].map((v) => (
-                  <div key={v} className="flex items-center gap-2 text-sm text-secondary-alpha">
-                    <span className="text-accent">◆</span> {v}
-                  </div>
-                ))}
-              </div>
-            </GlassCard>
-          </AnimatedSection>
-          <AnimatedSection delay={150}>
-            <div className="grid grid-cols-2 gap-4 h-full">
-              <StatBox value="94" suffix="%" label="Client Retention" />
-              <StatBox value="380" suffix="%" label="Average ROI" />
-              <StatBox value="50000" suffix="+" label="Hours Automated" />
-              <StatBox value="4.8" suffix="/5" label="Satisfaction" />
+        <AnimatedSection>
+          <GlassCard hover={false}>
+            <h2 className="text-2xl font-bold text-foreground mb-4">Who We Are</h2>
+            <p className="text-muted-alpha text-sm mb-6">
+              Ziiro is a forward-thinking AI automation agency that helps businesses streamline operations, reduce costs, and scale intelligently. We combine deep technical expertise with business acumen to deliver solutions that generate real ROI.
+            </p>
+            <h3 className="text-lg font-semibold text-foreground mb-2">Our Mission</h3>
+            <p className="text-muted-alpha text-sm mb-6">
+              To democratize AI automation and empower businesses of all sizes to operate at peak efficiency.
+            </p>
+            <h3 className="text-lg font-semibold text-foreground mb-3">Our Values</h3>
+            <div className="space-y-2">
+              {["Innovation First", "Client Success", "Transparency"].map((v) => (
+                <div key={v} className="flex items-center gap-2 text-sm text-secondary-alpha">
+                  <span className="text-accent">◆</span> {v}
+                </div>
+              ))}
             </div>
-          </AnimatedSection>
-        </div>
+          </GlassCard>
+        </AnimatedSection>
 
         {/* Process */}
         <AnimatedSection>
