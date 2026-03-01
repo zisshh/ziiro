@@ -53,20 +53,24 @@ const Contact = () => {
       });
       if (error) throw error;
 
-      // Send email notification
-      supabase.functions.invoke('send-contact-email', {
-        body: {
-          name: form.name,
-          email: form.email,
-          phone: form.phone,
-          company: form.company,
-          industry: form.industry,
-          service: form.service,
-          budget: form.budget,
-          timeline: form.timeline,
-          message: form.message,
-        },
-      }).catch((err) => console.error("Email notification error:", err));
+      // Send email notification (fire-and-forget, don't block submission)
+      try {
+        await supabase.functions.invoke('send-contact-email', {
+          body: {
+            name: form.name,
+            email: form.email,
+            phone: form.phone,
+            company: form.company,
+            industry: form.industry,
+            service: form.service,
+            budget: form.budget,
+            timeline: form.timeline,
+            message: form.message,
+          },
+        });
+      } catch (emailErr) {
+        console.warn("Email notification failed (non-blocking):", emailErr);
+      }
 
       setSubmitted(true);
     } catch (err) {
