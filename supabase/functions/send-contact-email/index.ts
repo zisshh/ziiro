@@ -18,7 +18,10 @@ serve(async (req) => {
 
     const { name, email, phone, company, industry, service, budget, timeline, message } = await req.json();
 
-    const htmlTable = `
+    const fromAddress = 'Ziiro <noreply@ziiro.work>';
+
+    // 1. Notification email to team
+    const teamHtml = `
       <h2 style="color:#333;font-family:sans-serif;">New Contact Form Submission</h2>
       <table style="border-collapse:collapse;width:100%;max-width:600px;font-family:sans-serif;">
         <tr style="background:#f4f4f4;"><td style="padding:10px;border:1px solid #ddd;font-weight:bold;">Name</td><td style="padding:10px;border:1px solid #ddd;">${name}</td></tr>
@@ -33,23 +36,55 @@ serve(async (req) => {
       </table>
     `;
 
-    const res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: 'Ziiro Contact Form <onboarding@resend.dev>',
-        to: ['aniket@ziiro.work', 'govind@ziiro.work'],
-        subject: `New Contact: ${name} from ${company}`,
-        html: htmlTable,
-      }),
-    });
+    // 2. Confirmation email to the person who submitted
+    const confirmationHtml = `
+      <div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#333;">
+        <h2 style="color:#333;">Thank you for reaching out, ${name}!</h2>
+        <p>We've received your message and our team will get back to you within 24 hours.</p>
+        <p>Here's a summary of what you submitted:</p>
+        <table style="border-collapse:collapse;width:100%;font-family:sans-serif;margin:16px 0;">
+          <tr style="background:#f4f4f4;"><td style="padding:10px;border:1px solid #ddd;font-weight:bold;">Company</td><td style="padding:10px;border:1px solid #ddd;">${company}</td></tr>
+          ${service ? `<tr><td style="padding:10px;border:1px solid #ddd;font-weight:bold;">Service Interest</td><td style="padding:10px;border:1px solid #ddd;">${service}</td></tr>` : ''}
+          ${budget ? `<tr style="background:#f4f4f4;"><td style="padding:10px;border:1px solid #ddd;font-weight:bold;">Budget</td><td style="padding:10px;border:1px solid #ddd;">${budget}</td></tr>` : ''}
+          ${timeline ? `<tr><td style="padding:10px;border:1px solid #ddd;font-weight:bold;">Timeline</td><td style="padding:10px;border:1px solid #ddd;">${timeline}</td></tr>` : ''}
+        </table>
+        <p>If you have any urgent questions, feel free to email us at <a href="mailto:aniket@ziiro.work">aniket@ziiro.work</a>.</p>
+        <p style="margin-top:24px;">Best regards,<br/><strong>The Ziiro Team</strong></p>
+      </div>
+    `;
 
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(`Resend API error: ${JSON.stringify(data)}`);
+    // Send both emails in parallel
+    const [teamRes, confirmRes] = await Promise.all([
+      fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: fromAddress,
+          to: ['aniket@ziiro.work', 'govind@ziiro.work'],
+          subject: `New Contact: ${name} from ${company}`,
+          html: teamHtml,
+        }),
+      }),
+      fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: fromAddress,
+          to: [email],
+          subject: `Thanks for contacting Ziiro, ${name}!`,
+          html: confirmationHtml,
+        }),
+      }),
+    ]);
+
+    const teamData = await teamRes.json();
+    const confirmData = await confirmRes.json();
+
+    if (!teamRes.ok) {
+      console.error('Team email failed:', teamData);
+    }
+    if (!confirmRes.ok) {
+      console.error('Confirmation email failed:', confirmData);
     }
 
     return new Response(JSON.stringify({ success: true }), {
