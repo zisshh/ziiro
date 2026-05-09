@@ -1,22 +1,27 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-
-const navLinks = [
-  { to: "/", label: "Home" },
-  { to: "/services", label: "Services" },
-  { to: "/about", label: "About" },
-  { to: "/pricing", label: "Pricing" },
-  { to: "/contact", label: "Contact" },
-];
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleResults = () => {
+    setOpen(false);
+    if (location.pathname === "/") {
+      document.getElementById("results")?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      navigate("/");
+      setTimeout(() => {
+        document.getElementById("results")?.scrollIntoView({ behavior: "smooth" });
+      }, 400);
+    }
+  };
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -32,55 +37,57 @@ const Navbar = () => {
         scrolled ? "glass-nav py-3" : "py-5"
       }`}
     >
-      <div className="container mx-auto px-4 flex items-center justify-between">
-        <Link to="/" className="text-2xl font-black tracking-widest text-foreground">
-          ZIIRO
+      <div className="w-full px-4 flex items-center justify-between">
+        <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
+          <img
+            src="/logo/ziiro-logo.png"
+            alt="Ziiro"
+            style={{ height: "64px", width: "auto", mixBlendMode: "lighten", filter: "brightness(3)" }}
+          />
         </Link>
 
         {/* Desktop */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              className={`text-sm font-medium transition-colors duration-200 hover:text-accent ${
-                location.pathname === l.to ? "text-accent" : "text-muted-alpha"
-              }`}
-            >
-              {l.label}
-            </Link>
-          ))}
-          <Link to="/contact" className="btn-glass text-sm">
-            Get Started
+        <div className="hidden md:flex items-center gap-10">
+          <Link
+            to="/services"
+            className={`text-sm font-medium tracking-wide transition-colors ${
+              location.pathname === "/services" ? "text-[#A8B4C8]" : "text-white/55 hover:text-white"
+            }`}
+          >
+            SERVICES
+          </Link>
+          <button
+            onClick={handleResults}
+            className="text-sm font-medium tracking-wide transition-colors text-white/55 hover:text-white"
+          >
+            RESULTS
+          </button>
+          <Link
+            to="/audit"
+            className={`text-sm font-medium tracking-wide transition-colors ${
+              location.pathname === "/audit" ? "text-[#A8B4C8]" : "text-white/55 hover:text-white"
+            }`}
+          >
+            FREE AUDIT
+          </Link>
+          <Link to="/contact" className="btn-primary-gradient text-sm font-bold !px-6 !py-2.5">
+            BOOK A CALL
           </Link>
         </div>
 
         {/* Mobile toggle */}
-        <button
-          onClick={() => setOpen(!open)}
-          className="md:hidden text-foreground"
-          aria-label="Toggle menu"
-        >
-          {open ? <X size={24} /> : <Menu size={24} />}
+        <button onClick={() => setOpen(!open)} className="md:hidden text-white" aria-label="Toggle menu">
+          {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
-      {/* Mobile menu */}
       {open && (
-        <div className="md:hidden glass-nav mt-2 mx-4 rounded-lg p-6 flex flex-col gap-4">
-          {navLinks.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              className={`text-base font-medium ${
-                location.pathname === l.to ? "text-accent" : "text-foreground"
-              }`}
-            >
-              {l.label}
-            </Link>
-          ))}
-          <Link to="/contact" className="btn-primary-gradient text-center text-sm mt-2">
-            Get Started
+        <div className="md:hidden glass-nav mt-2 mx-4 rounded-xl p-6 flex flex-col gap-5">
+          <Link to="/services" className="text-base font-medium text-white/80">Services</Link>
+          <button onClick={handleResults} className="text-base font-medium text-white/80 text-left">Results</button>
+          <Link to="/audit" className="text-base font-medium text-white/80">Free Audit</Link>
+          <Link to="/contact" className="btn-primary-gradient text-center text-sm font-bold mt-1">
+            Book a Call
           </Link>
         </div>
       )}

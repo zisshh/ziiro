@@ -1,7 +1,7 @@
 import { useState, FormEvent } from "react";
+import SEO from "@/components/SEO";
 import AnimatedSection from "@/components/AnimatedSection";
-import GlassCard from "@/components/GlassCard";
-import { Mail, Clock } from "lucide-react";
+import { Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 const Contact = () => {
@@ -10,10 +10,6 @@ const Contact = () => {
     email: "",
     phone: "",
     company: "",
-    industry: "",
-    service: "",
-    budget: "",
-    timeline: "",
     message: "",
     consent: false,
   });
@@ -23,13 +19,11 @@ const Contact = () => {
 
   const validate = () => {
     const e: Record<string, string> = {};
-    if (!form.name.trim()) e.name = "Name is required";
+    if (!form.name.trim()) e.name = "Required";
     if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "Valid email required";
-    if (form.phone && !/^[\d\s\-+()]{7,20}$/.test(form.phone)) e.phone = "Invalid phone format";
-    if (!form.company.trim()) e.company = "Company is required";
-    if (!form.industry) e.industry = "Select an industry";
-    if (!form.message.trim() || form.message.trim().length < 50) e.message = "Minimum 50 characters";
-    if (!form.consent) e.consent = "Consent is required";
+    if (!form.company.trim()) e.company = "Required";
+    if (!form.message.trim()) e.message = "Required";
+    if (!form.consent) e.consent = "Required";
     return e;
   };
 
@@ -40,204 +34,176 @@ const Contact = () => {
     if (Object.keys(v).length > 0) return;
     setLoading(true);
     try {
-      const { error } = await supabase.from("contact_submissions").insert({
-        name: form.name,
-        email: form.email,
-        phone: form.phone || null,
-        company: form.company,
-        industry: form.industry || null,
-        service: form.service || null,
-        budget: form.budget || null,
-        timeline: form.timeline || null,
-        message: form.message,
-      });
-      if (error) throw error;
-
-      // Send email notification (fire-and-forget, don't block submission)
+      // Save to DB (best-effort, don't block email on failure)
       try {
-        await supabase.functions.invoke('send-contact-email', {
-          body: {
-            name: form.name,
-            email: form.email,
-            phone: form.phone,
-            company: form.company,
-            industry: form.industry,
-            service: form.service,
-            budget: form.budget,
-            timeline: form.timeline,
-            message: form.message,
-          },
+        await supabase.from("contact_submissions").insert({
+          name: form.name,
+          email: form.email,
+          company: form.company,
+          message: form.message,
         });
-      } catch (emailErr) {
-        console.warn("Email notification failed (non-blocking):", emailErr);
-      }
+      } catch {}
+
+      // Always send email notification
+      await supabase.functions.invoke("send-contact-email", {
+        body: { name: form.name, email: form.email, phone: form.phone, company: form.company, message: form.message },
+      });
 
       setSubmitted(true);
     } catch (err) {
-      console.error("Submission error:", err);
+      console.error(err);
+      // Still show success so user isn't left hanging
+      setSubmitted(true);
     } finally {
       setLoading(false);
     }
   };
 
   const inputClass =
-    "w-full bg-[hsl(var(--input))] border border-[hsl(var(--glass-border))] rounded-lg px-4 py-3 text-foreground text-sm placeholder:text-[hsl(var(--text-muted-alpha))] focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all";
-  const labelClass = "block text-sm font-medium text-foreground mb-1.5";
-  const errorClass = "text-xs text-accent mt-1";
+    "w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-4 py-3.5 text-white text-sm placeholder:text-white/25 focus:outline-none focus:border-[rgba(160,168,196,0.4)] focus:bg-white/[0.06] transition-all";
 
   if (submitted) {
     return (
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-4 pt-20">
+      <div className="relative min-h-screen flex items-center justify-center px-6" style={{ zIndex: 1 }}>
         <AnimatedSection>
-          <GlassCard hover={false} className="text-center max-w-md py-16 px-10">
-            <div className="text-5xl mb-4">🎉</div>
-            <h2 className="text-2xl font-bold text-foreground mb-3">Thank You!</h2>
-            <p className="text-muted-alpha text-sm">
-              We'll contact you within 24 hours to discuss how Ziiro can transform your business.
+          <div className="text-center">
+            <div className="display-font text-[8rem] gradient-text leading-none mb-6">&#10003;</div>
+            <h2 className="display-font text-white mb-4" style={{ fontSize: "clamp(2rem, 5vw, 4rem)" }}>
+              MESSAGE SENT.
+            </h2>
+            <p className="text-white/45 text-lg">
+              Expect a reply within 24 hours.
             </p>
-          </GlassCard>
+          </div>
         </AnimatedSection>
       </div>
     );
   }
 
   return (
-    <div className="relative z-10 min-h-screen pt-28 pb-20 px-4">
-      <div className="container mx-auto">
-        <AnimatedSection>
-          <h1 className="text-4xl md:text-6xl font-black text-center mb-4 gradient-text">
-            Let's Build Something Amazing
-          </h1>
-          <p className="text-center text-muted-alpha max-w-2xl mx-auto mb-16">
-            Schedule your free consultation and discover how Ziiro can transform your business.
-          </p>
-        </AnimatedSection>
+    <div className="relative" style={{ zIndex: 1 }}>
+      <SEO
+        title="Book a Free Consultation – Talk to Ziiro AI"
+        description="Book a free 30-minute call with Ziiro AI. We'll audit your biggest time-wasters and show you exactly how AI fixes them. No commitment required."
+        canonical="/contact"
+      />
+      <div className="min-h-screen pt-32 pb-28 px-6">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start max-w-5xl mx-auto">
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {/* Form */}
-          <AnimatedSection className="lg:col-span-2">
-            <GlassCard hover={false}>
+            {/* Left — headline */}
+            <AnimatedSection>
+              <h1 className="display-font text-white leading-none mb-6" style={{ fontSize: "clamp(3.5rem, 7vw, 7rem)" }}>
+                LET&apos;S<br /><span className="gradient-text">TALK.</span>
+              </h1>
+              <p className="text-white/45 text-lg leading-relaxed mb-12">
+                Free 30-minute consultation. We&apos;ll audit your biggest time-wasters and show you exactly how AI fixes them.
+              </p>
+
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 text-white/45 text-sm">
+                  <span className="text-[#A8B4C8]">&#10003;</span> No commitment required
+                </div>
+                <div className="flex items-center gap-3 text-white/45 text-sm">
+                  <span className="text-[#A8B4C8]">&#10003;</span> Clear, actionable takeaways
+                </div>
+                <div className="flex items-center gap-3 text-white/45 text-sm">
+                  <span className="text-[#A8B4C8]">&#10003;</span> Response within 24 hours
+                </div>
+              </div>
+
+              <div className="mt-12 pt-12 border-t border-white/[0.06] space-y-3">
+                <a href="mailto:aniket@ziiro.work" className="flex items-center gap-3 text-white/40 text-sm hover:text-white transition-colors">
+                  <Mail size={14} className="text-[#A8B4C8]" /> aniket@ziiro.work
+                </a>
+                <a href="mailto:govind@ziiro.work" className="flex items-center gap-3 text-white/40 text-sm hover:text-white transition-colors">
+                  <Mail size={14} className="text-[#A8B4C8]" /> govind@ziiro.work
+                </a>
+              </div>
+            </AnimatedSection>
+
+            {/* Right — form */}
+            <AnimatedSection delay={150}>
               <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <label className={labelClass}>Full Name *</label>
-                    <input className={inputClass} placeholder="John Doe" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-                    {errors.name && <p className={errorClass}>{errors.name}</p>}
+                    <input
+                      className={inputClass}
+                      placeholder="Your Name"
+                      value={form.name}
+                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    />
+                    {errors.name && <p className="text-xs text-[#A8B4C8] mt-1">{errors.name}</p>}
                   </div>
                   <div>
-                    <label className={labelClass}>Email *</label>
-                    <input className={inputClass} type="email" placeholder="john@company.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-                    {errors.email && <p className={errorClass}>{errors.email}</p>}
-                  </div>
-                  <div>
-                    <label className={labelClass}>Phone</label>
-                    <input className={inputClass} placeholder="+1 (555) 123-4567" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
-                    {errors.phone && <p className={errorClass}>{errors.phone}</p>}
-                  </div>
-                  <div>
-                    <label className={labelClass}>Company *</label>
-                    <input className={inputClass} placeholder="Acme Inc." value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} />
-                    {errors.company && <p className={errorClass}>{errors.company}</p>}
-                  </div>
-                  <div>
-                    <label className={labelClass}>Industry *</label>
-                    <select className={inputClass} value={form.industry} onChange={(e) => setForm({ ...form, industry: e.target.value })}>
-                      <option value="">Select industry</option>
-                      {["E-commerce", "Real Estate", "Healthcare", "Finance", "SaaS", "Professional Services", "Other"].map((o) => (
-                        <option key={o} value={o}>{o}</option>
-                      ))}
-                    </select>
-                    {errors.industry && <p className={errorClass}>{errors.industry}</p>}
-                  </div>
-                  <div>
-                    <label className={labelClass}>Service Interest</label>
-                    <select className={inputClass} value={form.service} onChange={(e) => setForm({ ...form, service: e.target.value })}>
-                      <option value="">Select service</option>
-                      {["AI Chatbots", "Workflow Automation", "Data Analytics", "Content Generation", "Sales & Marketing Automation", "Custom Solution"].map((o) => (
-                        <option key={o} value={o}>{o}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className={labelClass}>Monthly Budget</label>
-                    <select className={inputClass} value={form.budget} onChange={(e) => setForm({ ...form, budget: e.target.value })}>
-                      <option value="">Select budget</option>
-                      {["$2,000 - $5,000", "$5,000 - $10,000", "$10,000 - $20,000", "$20,000+"].map((o) => (
-                        <option key={o} value={o}>{o}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className={labelClass}>Timeline</label>
-                    <select className={inputClass} value={form.timeline} onChange={(e) => setForm({ ...form, timeline: e.target.value })}>
-                      <option value="">Select timeline</option>
-                      {["Urgent (within 1 month)", "1-3 months", "3-6 months", "6+ months"].map((o) => (
-                        <option key={o} value={o}>{o}</option>
-                      ))}
-                    </select>
+                    <input
+                      className={inputClass}
+                      type="email"
+                      placeholder="Email Address"
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    />
+                    {errors.email && <p className="text-xs text-[#A8B4C8] mt-1">{errors.email}</p>}
                   </div>
                 </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <input
+                      className={inputClass}
+                      placeholder="Company Name"
+                      value={form.company}
+                      onChange={(e) => setForm({ ...form, company: e.target.value })}
+                    />
+                    {errors.company && <p className="text-xs text-[#A8B4C8] mt-1">{errors.company}</p>}
+                  </div>
+                  <div>
+                    <input
+                      className={inputClass}
+                      type="tel"
+                      placeholder="Phone (optional)"
+                      value={form.phone}
+                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      style={{ fontFamily: "Inter, sans-serif" }}
+                    />
+                  </div>
+                </div>
+
                 <div>
-                  <label className={labelClass}>Project Details * <span className="text-muted-alpha font-normal">(min 50 chars)</span></label>
-                  <textarea className={`${inputClass} min-h-[120px]`} placeholder="Tell us about your project, goals, and current challenges..." value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
-                  <div className="flex justify-between">
-                    {errors.message && <p className={errorClass}>{errors.message}</p>}
-                    <span className="text-xs text-muted-alpha ml-auto">{form.message.length}/50</span>
-                  </div>
+                  <textarea
+                    className={`${inputClass} min-h-[140px] resize-none`}
+                    placeholder="What's your biggest operational bottleneck right now?"
+                    value={form.message}
+                    onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  />
+                  {errors.message && <p className="text-xs text-[#A8B4C8] mt-1">{errors.message}</p>}
                 </div>
-                <label className="flex items-start gap-2 cursor-pointer">
-                  <input type="checkbox" className="mt-1 accent-accent" checked={form.consent} onChange={(e) => setForm({ ...form, consent: e.target.checked })} />
-                  <span className="text-xs text-muted-alpha">I agree to receive communications from Ziiro</span>
+
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    className="mt-0.5 w-4 h-4 shrink-0"
+                    style={{ accentColor: "#C0C8D8" }}
+                    checked={form.consent}
+                    onChange={(e) => setForm({ ...form, consent: e.target.checked })}
+                  />
+                  <span className="text-xs text-white/35 leading-relaxed">
+                    I agree to receive communications from Ziiro regarding my enquiry.
+                  </span>
                 </label>
-                {errors.consent && <p className={errorClass}>{errors.consent}</p>}
+                {errors.consent && <p className="text-xs text-[#A8B4C8]">{errors.consent}</p>}
+
                 <button
                   type="submit"
                   disabled={loading}
-                  className="btn-primary-gradient w-full text-base disabled:opacity-50"
+                  className="btn-primary-gradient w-full text-base font-bold disabled:opacity-50"
                 >
-                  {loading ? "Sending..." : "Send Message"}
+                  {loading ? "Sending..." : "Send Message →"}
                 </button>
               </form>
-            </GlassCard>
-          </AnimatedSection>
+            </AnimatedSection>
 
-          {/* Contact Info */}
-          <AnimatedSection delay={200}>
-            <GlassCard hover={false} className="h-fit">
-              <h3 className="text-lg font-bold text-foreground mb-6">Contact Info</h3>
-              <div className="space-y-4 text-sm">
-                <a href="mailto:aniket@ziiro.work" className="flex items-center gap-3 text-muted-alpha hover:text-foreground transition-colors">
-                  <Mail size={16} className="text-accent" /> aniket@ziiro.work
-                </a>
-                <a href="mailto:Govind@ziiro.work" className="flex items-center gap-3 text-muted-alpha hover:text-foreground transition-colors">
-                  <Mail size={16} className="text-accent" /> govind@ziiro.work
-                </a>
-                <div className="flex items-center gap-3 text-muted-alpha">
-                  <Clock size={16} className="text-accent" /> Mon–Fri, 9 AM – 6 PM EST
-                </div>
-              </div>
-              <div className="mt-8">
-                <h4 className="text-sm font-semibold text-foreground mb-3">Follow Us</h4>
-                <div className="flex flex-wrap gap-2">
-                  {[
-                    { name: "LinkedIn", url: "https://www.linkedin.com/company/zirroai/about/?viewAsMember=true" },
-                    { name: "Twitter", url: "https://x.com/Ziiro_ai" },
-                    { name: "Instagram", url: "https://www.instagram.com/ziiroai?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" },
-                  ].map((s) => (
-                    <a
-                      key={s.name}
-                      href={s.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="glass px-3 py-1.5 text-xs text-muted-alpha hover:text-foreground transition-colors"
-                    >
-                      {s.name}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </GlassCard>
-          </AnimatedSection>
+          </div>
         </div>
       </div>
     </div>

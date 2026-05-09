@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -12,13 +13,25 @@ serve(async (req) => {
 
   try {
     const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
-    if (!RESEND_API_KEY) {
-      throw new Error('RESEND_API_KEY is not configured');
-    }
+    if (!RESEND_API_KEY) throw new Error('RESEND_API_KEY is not configured');
+
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    );
 
     const { name, email, phone, company, industry, service, budget, timeline, message } = await req.json();
 
-    const fromAddress = 'Ziiro <noreply@ziiro.work>';
+    // Save to database (best-effort)
+    try {
+      await supabase.from('contact_submissions').insert({
+        name, email, phone: phone || null, company, message,
+      });
+    } catch (dbErr) {
+      console.error('DB insert error:', dbErr);
+    }
+
+    const fromAddress = 'Ziiro AI <onboarding@resend.dev>';
 
     // 1. Notification email to team
     const teamHtml = `
@@ -60,7 +73,7 @@ serve(async (req) => {
         headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
           from: fromAddress,
-          to: ['aniket@ziiro.work', 'govind@ziiro.work'],
+          to: ['ziiro.work@gmail.com'],
           subject: `New Contact: ${name} from ${company}`,
           html: teamHtml,
         }),

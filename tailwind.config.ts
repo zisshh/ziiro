@@ -67,6 +67,9 @@ export default {
         sm: "calc(var(--radius) - 8px)",
         pill: "50px",
       },
+      zIndex: {
+        "-1": "-1",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
