@@ -1,30 +1,25 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Index from "./pages/Index";
-import Services from "./pages/Services";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
-import Audit from "./pages/Audit";
-import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+const Index = lazy(() => import("./pages/Index"));
+const Services = lazy(() => import("./pages/Services"));
+const About = lazy(() => import("./pages/About"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const Terms = lazy(() => import("./pages/Terms"));
+const Audit = lazy(() => import("./pages/Audit"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const App = () => (
   <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark">
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Navbar />
+    <TooltipProvider>
+      <BrowserRouter>
+        <Navbar />
+        <Suspense fallback={<div className="min-h-screen" aria-hidden="true" />}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/services" element={<Services />} />
@@ -35,10 +30,10 @@ const App = () => (
             <Route path="/terms" element={<Terms />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <Footer />
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+        </Suspense>
+        <Footer />
+      </BrowserRouter>
+    </TooltipProvider>
   </ThemeProvider>
 );
 

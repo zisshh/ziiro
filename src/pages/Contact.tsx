@@ -2,7 +2,6 @@ import { useState, FormEvent } from "react";
 import SEO from "@/components/SEO";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Mail } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 
 const Contact = () => {
   const [form, setForm] = useState({
@@ -36,6 +35,7 @@ const Contact = () => {
     setLoading(true);
     setSubmitError("");
     try {
+      const { supabase } = await import("@/integrations/supabase/client");
       const { data, error: emailError } = await supabase.functions.invoke("send-contact-email", {
         body: { name: form.name, email: form.email, phone: form.phone, company: form.company, message: form.message },
       });

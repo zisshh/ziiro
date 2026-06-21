@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
-import { supabase } from "@/integrations/supabase/client";
 import SEO from "@/components/SEO";
 
 const DISPOSABLE_DOMAINS = new Set([
@@ -154,6 +153,7 @@ const Audit = () => {
     setLoading(true);
     setSubmitError("");
     try {
+      const { supabase } = await import("@/integrations/supabase/client");
       const { data, error } = await supabase.functions.invoke("send-audit-email", {
         body: {
           name: form.name,

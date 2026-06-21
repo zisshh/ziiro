@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ziiro Multi-Route Performance Report</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #060610;
+        --panel: rgba(255, 255, 255, 0.045);
+        --panel-strong: rgba(255, 255, 255, 0.07);
+        --border: rgba(255, 255, 255, 0.1);
+        --muted: rgba(255, 255, 255, 0.58);
+        --text: #f8fafc;
+        --accent: #c0c8d8;
+        --good: #9ee6b8;
+        --warn: #ffd28a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family:
+          ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+          monospace;
+        background:
+          radial-gradient(circle at 15% 0%, rgba(192, 200, 216, 0.16), transparent 34rem),
+          radial-gradient(circle at 85% 12%, rgba(110, 120, 136, 0.12), transparent 30rem),
+          var(--bg);
+        color: var(--text);
+      }
+
+      main {
+        width: min(1160px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 56px 0;
+      }
+
+      header {
+        display: grid;
+        gap: 18px;
+        margin-bottom: 34px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        max-width: 900px;
+        font-size: clamp(2.5rem, 7vw, 5.6rem);
+        line-height: 0.96;
+        letter-spacing: 0.02em;
+      }
+
+      h2 {
+        font-size: 0.85rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      h3 {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.88);
+      }
+
+      .subtitle {
+        max-width: 800px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .pill {
+        display: inline-flex;
+        width: fit-content;
+        align-items: center;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 10px 14px;
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--accent);
+        font-size: 0.75rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      .score-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        margin: 32px 0;
+      }
+
+      .two-col {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .card {
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        background: var(--panel);
+        padding: 24px;
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.22);
+      }
+
+      .metric {
+        display: grid;
+        gap: 10px;
+      }
+
+      .label {
+        color: var(--muted);
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+      }
+
+      .value {
+        font-size: clamp(2rem, 5vw, 4rem);
+        line-height: 1;
+      }
+
+      .delta {
+        color: var(--good);
+        font-size: 0.85rem;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 15px;
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        color: var(--accent);
+        font-size: 0.76rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      td {
+        color: rgba(255, 255, 255, 0.82);
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      ul {
+        margin: 16px 0 0;
+        padding-left: 20px;
+        color: rgba(255, 255, 255, 0.76);
+        line-height: 1.7;
+      }
+
+      .keep {
+        color: var(--good);
+      }
+
+      .revert {
+        color: var(--warn);
+      }
+
+      .section {
+        margin-top: 16px;
+      }
+
+      @media (max-width: 860px) {
+        main {
+          padding: 32px 0;
+        }
+
+        .score-grid,
+        .two-col {
+          grid-template-columns: 1fr;
+        }
+
+        th,
+        td {
+          padding: 13px 10px;
+          font-size: 0.82rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <span class="pill">All public routes · Mobile Lighthouse</span>
+        <h1>Ziiro got faster across the whole site.</h1>
+        <p class="subtitle">
+          This report compares the average mobile Lighthouse Performance score across
+          <strong>/</strong>, <strong>/services</strong>, <strong>/about</strong>,
+          <strong>/contact</strong>, <strong>/audit</strong>, <strong>/privacy</strong>, and
+          <strong>/terms</strong>. The benchmark uses a production build and Vite preview.
+        </p>
+      </header>
+
+      <section class="grid score-grid" aria-label="Score summary">
+        <article class="card metric">
+          <span class="label">Baseline average</span>
+          <strong class="value">84.4</strong>
+          <span class="delta">Before optimization</span>
+        </article>
+        <article class="card metric">
+          <span class="label">Final average</span>
+          <strong class="value">93.3</strong>
+          <span class="delta">+8.9 points</span>
+        </article>
+        <article class="card metric">
+          <span class="label">Best measured run</span>
+          <strong class="value">93.7</strong>
+          <span class="delta">Kept before hardening</span>
+        </article>
+        <article class="card metric">
+          <span class="label">Routes scored</span>
+          <strong class="value">7</strong>
+          <span class="delta">All public paths</span>
+        </article>
+      </section>
+
+      <section class="card" aria-label="Route comparison">
+        <h2>Before vs After By Route</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Route</th>
+              <th>Before</th>
+              <th>After</th>
+              <th>Improvement</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>/</td><td>81</td><td>94</td><td class="keep">+13</td></tr>
+            <tr><td>/services</td><td>84</td><td>94</td><td class="keep">+10</td></tr>
+            <tr><td>/about</td><td>85</td><td>95</td><td class="keep">+10</td></tr>
+            <tr><td>/contact</td><td>84</td><td>95</td><td class="keep">+11</td></tr>
+            <tr><td>/audit</td><td>82</td><td>91</td><td class="keep">+9</td></tr>
+            <tr><td>/privacy</td><td>87</td><td>92</td><td class="keep">+5</td></tr>
+            <tr><td>/terms</td><td>88</td><td>92</td><td class="keep">+4</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="grid two-col section">
+        <article class="card">
+          <h2>What Improved</h2>
+          <ul>
+            <li>Split every public page into lazy route chunks instead of one large shared route bundle.</li>
+            <li>Lazy-loaded and conditionally mounted the orbital service visualization so hidden desktop widgets do not run on mobile.</li>
+            <li>Deferred the Supabase client until contact/audit form submission.</li>
+            <li>Removed unused React Query and global toaster shell work from every route.</li>
+            <li>Hardened the Focus navigation after lazy-loading and paused orbital JS rotation in hidden tabs.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h2>Rejected Experiments</h2>
+          <ul>
+            <li><span class="revert">Font trimming:</span> average score fell from 91.0 to 90.7, so it was reverted.</li>
+            <li><span class="revert">Static legal pages:</span> average score fell from 91.0 to 90.6, so it was reverted.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="card section" aria-label="Experiment log">
+        <h2>Experiment Timeline</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Round</th>
+              <th>Hypothesis</th>
+              <th>Before</th>
+              <th>After</th>
+              <th>Decision</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>0</td><td>Baseline</td><td>0.0</td><td>84.4</td><td class="keep">keep</td></tr>
+            <tr><td>1</td><td>Route-level lazy loading</td><td>84.4</td><td>89.4</td><td class="keep">keep</td></tr>
+            <tr><td>2</td><td>Conditional lazy orbital timeline</td><td>89.4</td><td>89.7</td><td class="keep">keep</td></tr>
+            <tr><td>3</td><td>Defer Supabase client until submit</td><td>89.7</td><td>91.0</td><td class="keep">keep</td></tr>
+            <tr><td>4</td><td>Trim Google Fonts requested weights</td><td>91.0</td><td>90.7</td><td class="revert">revert</td></tr>
+            <tr><td>5</td><td>Static legal pages with SEO</td><td>91.0</td><td>90.6</td><td class="revert">revert</td></tr>
+            <tr><td>6</td><td>Remove unused React Query provider</td><td>91.0</td><td>91.9</td><td class="keep">keep</td></tr>
+            <tr><td>7</td><td>Remove unused global toaster mounts</td><td>91.9</td><td>93.7</td><td class="keep">keep</td></tr>
+            <tr><td>8</td><td>Navigation and hidden-tab hardening</td><td>93.7</td><td>93.3</td><td class="keep">keep</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </body>
+</html>

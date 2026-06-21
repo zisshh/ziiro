@@ -8,16 +8,19 @@ import type { TimelineItem } from "@/types/orbital-timeline";
 
 interface RadialOrbitalTimelineProps {
   timelineData: TimelineItem[];
+  autoRotateEnabled?: boolean;
 }
 
 export default function RadialOrbitalTimeline({
   timelineData,
+  autoRotateEnabled = true,
 }: RadialOrbitalTimelineProps) {
   const [expandedItems, setExpandedItems] = useState<Record<number, boolean>>({});
   const [rotationAngle, setRotationAngle] = useState<number>(0);
-  const [autoRotate, setAutoRotate] = useState<boolean>(true);
+  const [autoRotate, setAutoRotate] = useState<boolean>(autoRotateEnabled);
   const [pulseEffect, setPulseEffect] = useState<Record<number, boolean>>({});
   const [centerOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [isDocumentVisible, setIsDocumentVisible] = useState(() => typeof document === "undefined" || !document.hidden);
   const [activeNodeId, setActiveNodeId] = useState<number | null>(null);
   const [activeChildSelection, setActiveChildSelection] = useState<{ parentId: number; childId: string } | null>(null);
   const [hoveredId, setHoveredId] = useState<number | null>(null);
@@ -31,7 +34,7 @@ export default function RadialOrbitalTimeline({
       setActiveNodeId(null);
       setActiveChildSelection(null);
       setPulseEffect({});
-      setAutoRotate(true);
+      setAutoRotate(autoRotateEnabled);
     }
   };
 
@@ -50,18 +53,32 @@ export default function RadialOrbitalTimeline({
       setPulseEffect(newPulse);
       centerViewOnNode(id);
     } else {
-      setAutoRotate(true);
+      setAutoRotate(autoRotateEnabled);
       setPulseEffect({});
     }
   };
 
   useEffect(() => {
-    if (!autoRotate) return;
+    if (!autoRotateEnabled) {
+      setAutoRotate(false);
+      return;
+    }
+    if (!activeNodeId) setAutoRotate(true);
+  }, [activeNodeId, autoRotateEnabled]);
+
+  useEffect(() => {
+    const onVisibilityChange = () => setIsDocumentVisible(!document.hidden);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", onVisibilityChange);
+  }, []);
+
+  useEffect(() => {
+    if (!autoRotate || !autoRotateEnabled || !isDocumentVisible) return;
     const timer = setInterval(() => {
       setRotationAngle((prev) => Number(((prev + 0.25) % 360).toFixed(3)));
-    }, 50);
+    }, 120);
     return () => clearInterval(timer);
-  }, [autoRotate]);
+  }, [autoRotate, autoRotateEnabled, isDocumentVisible]);
 
   const centerViewOnNode = (nodeId: number) => {
     if (!nodeRefs.current[nodeId]) return;
@@ -159,7 +176,7 @@ export default function RadialOrbitalTimeline({
                   transition: "transform 700ms ease, opacity 200ms ease, z-index 0ms",
                 }}
                 onMouseEnter={() => { setHoveredId(item.id); setAutoRotate(false); }}
-                onMouseLeave={() => { setHoveredId(null); if (!activeNodeId) setAutoRotate(true); }}
+                onMouseLeave={() => { setHoveredId(null); if (!activeNodeId) setAutoRotate(autoRotateEnabled); }}
               >
                 {/* Energy aura — expands on hover */}
                 <div

@@ -1,6 +1,7 @@
 import * as React from "react";
 
 const MOBILE_BREAKPOINT = 768;
+const LARGE_SCREEN_BREAKPOINT = 1024;
 
 export function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined);
@@ -16,4 +17,20 @@ export function useIsMobile() {
   }, []);
 
   return !!isMobile;
+}
+
+export function useIsLargeScreen() {
+  const [isLargeScreen, setIsLargeScreen] = React.useState(
+    () => typeof window !== "undefined" && window.matchMedia(`(min-width: ${LARGE_SCREEN_BREAKPOINT}px)`).matches
+  );
+
+  React.useEffect(() => {
+    const mql = window.matchMedia(`(min-width: ${LARGE_SCREEN_BREAKPOINT}px)`);
+    const onChange = () => setIsLargeScreen(mql.matches);
+    mql.addEventListener("change", onChange);
+    onChange();
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+
+  return isLargeScreen;
 }

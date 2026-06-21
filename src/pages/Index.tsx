@@ -1,10 +1,13 @@
+import { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import SEO from "@/components/SEO";
 import { Bot, BrainCircuit, Clapperboard, RefreshCw, UserCheck } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import DeferredDottedSurface from "@/components/DeferredDottedSurface";
-import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
+import { useIsLargeScreen } from "@/hooks/use-mobile";
 import { selfOptimizingSystemNodes } from "@/data/self-optimizing-systems";
+
+const RadialOrbitalTimeline = lazy(() => import("@/components/ui/radial-orbital-timeline"));
 
 const steps = [
   { num: "01", title: "Systems Audit", detail: "We find the manual loops, decision bottlenecks, and founder tasks that should become agentic systems." },
@@ -73,6 +76,7 @@ const servicesData = [
 ];
 
 const Home = () => {
+  const isLargeScreen = useIsLargeScreen();
   const scrollBehavior = () =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
 
@@ -122,23 +126,27 @@ const Home = () => {
           </div>
 
           {/* Right — orbital services */}
-          <div
-            className="hidden lg:block relative"
-            style={{
-              minHeight: "100vh",
-              background: "linear-gradient(to right, transparent 0%, #060610 18%)",
-            }}
-          >
-            <div style={{ position: "absolute", inset: 0, zIndex: 1 }}>
-              <RadialOrbitalTimeline timelineData={servicesData} />
-            </div>
-            <p
-              className="pointer-events-none absolute left-1/2 -translate-x-1/2 text-white/35 text-xs tracking-widest uppercase"
-              style={{ top: "min(calc(50% + 270px), calc(100% - 56px))", zIndex: 0 }}
+          {isLargeScreen && (
+            <div
+              className="relative"
+              style={{
+                minHeight: "100vh",
+                background: "linear-gradient(to right, transparent 0%, #060610 18%)",
+              }}
             >
-              Click any service node
-            </p>
-          </div>
+              <div style={{ position: "absolute", inset: 0, zIndex: 1 }}>
+                <Suspense fallback={null}>
+                  <RadialOrbitalTimeline timelineData={servicesData} />
+                </Suspense>
+              </div>
+              <p
+                className="pointer-events-none absolute left-1/2 -translate-x-1/2 text-white/35 text-xs tracking-widest uppercase"
+                style={{ top: "min(calc(50% + 270px), calc(100% - 56px))", zIndex: 0 }}
+              >
+                Click any service node
+              </p>
+            </div>
+          )}
 
         </div>
       </section>

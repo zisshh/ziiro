@@ -1,0 +1,10 @@
+round	timestamp	hypothesis	changed_files	before_score	after_score	decision	notes
+0	2026-06-21T21:35:00Z	baseline		0.0	84.4	keep	per_route=/:81.0,/services:84.0,/about:85.0,/contact:84.0,/audit:82.0,/privacy:87.0,/terms:88.0
+1	2026-06-21T21:39:00Z	route-level lazy loading	src/App.tsx	84.4	89.4	keep	per_route=/:93.0,/services:93.0,/about:92.0,/contact:86.0,/audit:82.0,/privacy:91.0,/terms:89.0
+2	2026-06-21T21:43:00Z	conditional lazy orbital timeline	src/pages/Index.tsx,src/pages/Services.tsx,src/components/ui/radial-orbital-timeline.tsx,src/hooks/use-mobile.tsx	89.4	89.7	keep	per_route=/:93.0,/services:91.0,/about:92.0,/contact:86.0,/audit:86.0,/privacy:90.0,/terms:90.0
+3	2026-06-21T21:46:00Z	defer Supabase client until submit	src/pages/Contact.tsx,src/pages/Audit.tsx	89.7	91.0	keep	per_route=/:92.0,/services:91.0,/about:93.0,/contact:90.0,/audit:91.0,/privacy:90.0,/terms:90.0
+4	2026-06-21T21:49:00Z	trim Google Fonts requested weights	index.html	91.0	90.7	revert	per_route=/:92.0,/services:91.0,/about:93.0,/contact:90.0,/audit:89.0,/privacy:90.0,/terms:90.0
+5	2026-06-21T21:53:00Z	static legal pages with SEO	src/pages/Privacy.tsx,src/pages/Terms.tsx	91.0	90.6	revert	per_route=/:92.0,/services:91.0,/about:92.0,/contact:90.0,/audit:89.0,/privacy:90.0,/terms:90.0
+6	2026-06-21T21:57:00Z	remove unused React Query provider	src/App.tsx	91.0	91.9	keep	per_route=/:94.0,/services:93.0,/about:94.0,/contact:91.0,/audit:90.0,/privacy:90.0,/terms:91.0
+7	2026-06-21T22:01:00Z	remove unused global toaster mounts	src/App.tsx	91.9	93.7	keep	per_route=/:95.0,/services:95.0,/about:95.0,/contact:95.0,/audit:92.0,/privacy:92.0,/terms:92.0
+8	2026-06-21T22:07:00Z	review hardening for lazy navigation and hidden-tab animation	src/components/Navbar.tsx,src/components/ui/radial-orbital-timeline.tsx	93.7	93.3	keep	per_route=/:94.0,/services:94.0,/about:95.0,/contact:95.0,/audit:91.0,/privacy:92.0,/terms:92.0; kept for navigation and hidden-tab correctness

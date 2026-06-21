@@ -5,6 +5,7 @@ import { Menu, X } from "lucide-react";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [pendingResultsScroll, setPendingResultsScroll] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -16,10 +17,8 @@ const Navbar = () => {
     if (location.pathname === "/") {
       document.getElementById("results")?.scrollIntoView({ behavior: scrollBehavior() });
     } else {
+      setPendingResultsScroll(true);
       navigate("/");
-      setTimeout(() => {
-        document.getElementById("results")?.scrollIntoView({ behavior: scrollBehavior() });
-      }, 400);
     }
   };
 
@@ -28,6 +27,35 @@ const Navbar = () => {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (!pendingResultsScroll) return;
+    if (location.pathname !== "/") {
+      setPendingResultsScroll(false);
+      return;
+    }
+
+    let frame = 0;
+    let attempts = 0;
+    const scrollWhenReady = () => {
+      const results = document.getElementById("results");
+      if (results) {
+        results.scrollIntoView({ behavior: scrollBehavior() });
+        setPendingResultsScroll(false);
+        return;
+      }
+
+      attempts += 1;
+      if (attempts < 120) {
+        frame = window.requestAnimationFrame(scrollWhenReady);
+      } else {
+        setPendingResultsScroll(false);
+      }
+    };
+
+    frame = window.requestAnimationFrame(scrollWhenReady);
+    return () => window.cancelAnimationFrame(frame);
+  }, [location.pathname, pendingResultsScroll]);
 
   useEffect(() => {
     setOpen(false);
