@@ -145,6 +145,7 @@ export default function RadialOrbitalTimeline({
             const relatedIds = activeChild ? [] : item.relatedIds;
             const nodeSize = isExpanded ? 60 : isHovered ? 52 : 44;
             const auraSize = isHovered ? item.energy * 0.5 + 70 : item.energy * 0.4 + 44;
+            const expandedCardTop = activeChild ? "top-[11.5rem]" : hasChildNodes ? "top-[15.5rem]" : "top-[4.5rem]";
 
             return (
               <div
@@ -228,7 +229,7 @@ export default function RadialOrbitalTimeline({
                 {/* Child nodes — used for offers that break into sub-systems */}
                 {isExpanded && hasChildNodes && item.childNodes && (
                   <div
-                    className="absolute top-[5.8rem] left-1/2 z-[210] flex w-[min(22rem,calc(100vw-2rem))] -translate-x-1/2 flex-wrap items-start justify-center gap-3"
+                    className="absolute top-[5.8rem] left-1/2 z-[210] flex w-[min(24rem,calc(100vw-2rem))] -translate-x-1/2 flex-wrap items-start justify-center gap-1.5"
                     onClick={(e) => e.stopPropagation()}
                   >
                     {item.childNodes.map((childNode) => {
@@ -239,7 +240,7 @@ export default function RadialOrbitalTimeline({
                         <button
                           key={childNode.id}
                           type="button"
-                          className="group flex w-[88px] flex-col items-center gap-1 rounded-xl text-center outline-none focus-visible:ring-2 focus-visible:ring-[#C0C8D8] focus-visible:ring-offset-2 focus-visible:ring-offset-[#060610]"
+                          className="group flex w-[66px] flex-col items-center gap-1 rounded-xl text-center outline-none focus-visible:ring-2 focus-visible:ring-[#C0C8D8] focus-visible:ring-offset-2 focus-visible:ring-offset-[#060610]"
                           onClick={(e) => {
                             e.stopPropagation();
                             if (isChildActive) {
@@ -283,7 +284,7 @@ export default function RadialOrbitalTimeline({
                 {/* Expanded card */}
                 {isExpanded && (
                   <Card
-                    className={`absolute ${hasChildNodes ? "top-[12rem]" : "top-[4.5rem]"} left-1/2 -translate-x-1/2 w-60 border-white/10 shadow-xl overflow-visible`}
+                    className={`absolute ${expandedCardTop} left-1/2 -translate-x-1/2 w-60 border-white/10 shadow-xl overflow-visible`}
                     style={{ background: "rgba(6,6,16,0.96)", backdropFilter: "blur(20px)" }}
                     onClick={(e) => e.stopPropagation()}
                     aria-live="polite"

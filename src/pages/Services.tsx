@@ -145,7 +145,7 @@ const Services = () => {
         </div>
 
         {/* Mobile orbital */}
-        <div className="lg:hidden w-full" style={{ height: "560px" }}>
+        <div className="lg:hidden w-full" style={{ height: "920px" }}>
           <RadialOrbitalTimeline timelineData={orbitalData} />
         </div>
         <p className="lg:hidden pb-8 text-center text-white/35 text-xs tracking-widest uppercase">
