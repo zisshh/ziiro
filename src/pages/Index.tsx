@@ -1,80 +1,85 @@
 import { Link } from "react-router-dom";
 import SEO from "@/components/SEO";
-import { Mail, Video, GitBranch, Users, PenLine } from "lucide-react";
+import { Bot, BrainCircuit, MailCheck, UserCheck, Workflow } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
+import DeferredDottedSurface from "@/components/DeferredDottedSurface";
 import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
 
 const steps = [
-  { num: "01", title: "Discovery Call", detail: "We uncover where automation creates the biggest leverage and we learn your business." },
-  { num: "02", title: "Architecture Blueprint", detail: "A custom system design with clear timeline and fixed pricing." },
-  { num: "03", title: "Build & Deploy", detail: "Your AI system goes live in weeks, fully connected to your stack." },
-  { num: "04", title: "Autonomous Growth", detail: "Your pipeline runs 24/7. You stay in control in 15–20 minutes per day." },
+  { num: "01", title: "Systems Audit", detail: "We find the manual loops, decision bottlenecks, and founder tasks that should become agentic systems." },
+  { num: "02", title: "Agent Blueprint", detail: "A clear architecture for the agents, tools, data, and feedback loops your business actually needs." },
+  { num: "03", title: "Build & Connect", detail: "We ship the workflows into your stack: outreach, CRM, reporting, role clarity, and internal ops." },
+  { num: "04", title: "Measure & Improve", detail: "The system tracks outcomes, learns what works, and gives your team a simple control panel." },
 ];
 
 const servicesData = [
   {
     id: 1,
-    title: "Cold Outreach",
-    date: "More booked calls",
-    content: "Hyper-personalised email and LinkedIn sequences that land in inboxes, not spam — and get replies.",
-    category: "Outreach",
-    icon: Mail,
+    title: "Agentic Systems",
+    date: "Custom AI operators",
+    content: "We build agents that handle real business workflows: research, routing, follow-ups, reporting, and repetitive decisions.",
+    category: "Agents",
+    icon: Bot,
     relatedIds: [3, 4],
+    status: "completed" as const,
+    energy: 96,
+  },
+  {
+    id: 2,
+    title: "Self-Optimizing Outreach",
+    date: "Sequences that learn",
+    content: "Cold-email and referral loops that track replies, score what works, and improve the next sequence automatically.",
+    category: "Growth",
+    icon: MailCheck,
+    relatedIds: [1, 3],
+    status: "completed" as const,
+    energy: 94,
+  },
+  {
+    id: 3,
+    title: "Workflow Automation",
+    date: "Less manual ops",
+    content: "CRM updates, follow-ups, handoffs, dashboards, and internal workflows connected into one reliable operating system.",
+    category: "Automation",
+    icon: Workflow,
+    relatedIds: [1, 2, 4],
     status: "completed" as const,
     energy: 92,
   },
   {
-    id: 2,
-    title: "UGC Ads & Management",
-    date: "Lower CAC, higher ROAS",
-    content: "We source creators, produce UGC-style ads, and manage your paid campaigns across Meta and TikTok.",
-    category: "Ads",
-    icon: Video,
-    relatedIds: [4],
+    id: 4,
+    title: "AI Strategy Sprint",
+    date: "Know what to build",
+    content: "We map your team, stack, and constraints into a focused roadmap instead of selling random automations.",
+    category: "Consulting",
+    icon: BrainCircuit,
+    relatedIds: [1, 3, 5],
     status: "completed" as const,
     energy: 88,
   },
   {
-    id: 3,
-    title: "Pipeline Automation",
-    date: "Zero leads fall through",
-    content: "Automated follow-ups, CRM updates, and deal-stage triggers so your pipeline runs itself.",
-    category: "Automation",
-    icon: GitBranch,
-    relatedIds: [1, 4],
-    status: "completed" as const,
-    energy: 95,
-  },
-  {
-    id: 4,
-    title: "Lead Generation",
-    date: "Qualified leads daily",
-    content: "We build targeted prospect lists and multi-channel flows that deliver sales-ready leads on autopilot.",
-    category: "Growth",
-    icon: Users,
-    relatedIds: [1, 2, 3],
-    status: "completed" as const,
-    energy: 90,
-  },
-  {
     id: 5,
-    title: "Social Content",
-    date: "Always-on presence",
-    content: "Scroll-stopping posts, carousels, and short-form video content that builds your brand every day.",
-    category: "Content",
-    icon: PenLine,
-    relatedIds: [2, 4],
+    title: "Role Analyzer",
+    date: "People in the right seats",
+    content: "A diagnostic that reveals what each person should own, so founders stop dragging people through the wrong work.",
+    category: "People Ops",
+    icon: UserCheck,
+    relatedIds: [3, 4],
     status: "completed" as const,
-    energy: 85,
+    energy: 86,
   },
 ];
 
 const Home = () => {
+  const scrollBehavior = () =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+
   return (
     <div className="relative" style={{ zIndex: 1 }}>
+      <DeferredDottedSurface />
       <SEO
-        title="AI Automation Agency - Scale Your Business on Autopilot"
-        description="Ziiro AI automates your sales outreach, lead generation, pipeline management, and content — so your business runs 24/7. Book a free consultation today."
+        title="Agentic AI Systems for Startups and Solo Founders"
+        description="Ziiro builds agentic AI systems, self-optimizing outreach loops, workflow automations, and role diagnostics for startups and solo founders."
         canonical="/"
       />
 
@@ -88,15 +93,15 @@ const Home = () => {
               <h1 className="display-font leading-none mb-6" style={{ fontSize: "clamp(2.6rem, 5.5vw, 5.5rem)" }}>
                 <span className="text-white">ZIIRO</span>
                 <br />
-                <span className="text-white">LIMITS.</span>
+                <span className="text-white">BUILDS</span>
                 <br />
-                <span className="gradient-text">INFINITE</span>
+                <span className="gradient-text">AGENTIC</span>
                 <br />
-                <span className="gradient-text">POSSIBILITIES.</span>
+                <span className="gradient-text">SYSTEMS.</span>
               </h1>
 
               <p className="text-white/50 text-base max-w-md mb-8 leading-relaxed">
-                We automate your workflows, build AI agents, and scale your business — while you focus on what matters.
+                We build self-improving AI systems for startups and solo founders: agents that automate work, learn from outcomes, and free you from manual drag.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
@@ -104,7 +109,7 @@ const Home = () => {
                   Book Free Consultation
                 </Link>
                 <button
-                  onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })}
+                  onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: scrollBehavior() })}
                   className="btn-glass text-sm"
                 >
                   See How It Works
@@ -139,7 +144,7 @@ const Home = () => {
           <AnimatedSection>
             <p className="section-label text-center mb-4">How it works</p>
             <h2 className="display-font text-center mb-14 text-white" style={{ fontSize: "clamp(2.5rem, 5vw, 5rem)" }}>
-              FOUR STEPS TO <span className="gradient-text">AUTOMATION</span>
+              FOUR STEPS TO <span className="gradient-text">AGENTS</span>
             </h2>
           </AnimatedSection>
 
@@ -163,27 +168,24 @@ const Home = () => {
       <section id="results" className="relative py-24 border-t border-white/[0.06]">
         <div className="mx-auto max-w-6xl px-8">
 
-          {/* Header */}
           <AnimatedSection>
-            <p className="section-label mb-4">Case Study</p>
+            <p className="section-label mb-4">Strategic Focus</p>
             <h2 className="display-font text-white mb-5" style={{ fontSize: "clamp(2rem, 4.5vw, 4rem)" }}>
-              We Run Our Own Pipeline<br />
-              <span className="gradient-text">On This.</span>
+              Built For Founder-Led Teams<br />
+              <span className="gradient-text">That Need Leverage.</span>
             </h2>
             <p className="text-white/50 text-sm leading-relaxed max-w-xl mb-16">
-              ZIIRO&apos;s go-to-market runs on the exact same AI automation system we build for clients.<br />
-              Shared data layer. Centralized command center.<br />
-              Pipeline runs 24/7.
+              Ziiro is focused on agentic AI systems for lean, founder-led teams.
+              The goal is simple: turn repeated work into measurable systems that improve with every outcome.
             </p>
           </AnimatedSection>
 
-          {/* Metrics row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-px mb-16" style={{ background: "rgba(255,255,255,0.06)" }}>
             {[
-              { value: "24+", label: "AI workflows deployed", sub: "Lead sourcing, outreach, qualification, follow-ups, reporting" },
-              { value: "24/7", label: "Autonomous operation", sub: "Outbound + inbound running nonstop" },
-              { value: "~$200/mo", label: "Total infra cost", sub: "Tools, APIs, automation stack" },
-              { value: "20 min/day", label: "Human time required", sub: "Only monitoring + approvals" },
+              { value: "Agents", label: "Core offer", sub: "Custom AI operators for real workflows, not surface-level automation" },
+              { value: "Loops", label: "Differentiator", sub: "Outreach and ops systems that track outcomes and improve over time" },
+              { value: "Founders", label: "Primary ICP", sub: "Startups, solo founders, and lean teams that need leverage fast" },
+              { value: "Roles", label: "People fit", sub: "Diagnostics that help each person own the work they are best built for" },
             ].map((m, i) => (
               <div key={m.label} className="h-full">
                 <AnimatedSection delay={i * 80} className="h-full">
@@ -202,8 +204,7 @@ const Home = () => {
           {/* Trust footer */}
           <AnimatedSection>
             <p className="text-white/25 text-xs text-center border-t border-white/[0.06] pt-8">
-              Our own client pipeline is powered entirely by this system.
-              If it didn&apos;t work, we wouldn&apos;t run our business on it.
+              We are steering Ziiro toward agentic AI products and systems that double as real portfolio proof.
             </p>
           </AnimatedSection>
 
@@ -214,10 +215,10 @@ const Home = () => {
       <section className="relative py-28 px-6 border-t border-white/[0.06] text-center">
         <AnimatedSection>
           <h2 className="display-font text-white mb-4" style={{ fontSize: "clamp(2.5rem, 6vw, 6rem)" }}>
-            READY TO <span className="gradient-text">AUTOMATE?</span>
+            READY TO <span className="gradient-text">BUILD AGENTS?</span>
           </h2>
           <p className="text-white/45 mb-10 text-base max-w-lg mx-auto">
-            Free 30-minute call. No pitch — just a clear plan for your business.
+            Free 30-minute call. No pitch — just a clear read on where agents can create leverage.
           </p>
           <Link to="/contact" className="btn-primary-gradient text-base font-bold inline-block">
             Book Your Free Call

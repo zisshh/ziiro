@@ -16,6 +16,7 @@ const Contact = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const validate = () => {
     const e: Record<string, string> = {};
@@ -33,27 +34,17 @@ const Contact = () => {
     setErrors(v);
     if (Object.keys(v).length > 0) return;
     setLoading(true);
+    setSubmitError("");
     try {
-      // Save to DB (best-effort, don't block email on failure)
-      try {
-        await supabase.from("contact_submissions").insert({
-          name: form.name,
-          email: form.email,
-          company: form.company,
-          message: form.message,
-        });
-      } catch {}
-
-      // Always send email notification
-      await supabase.functions.invoke("send-contact-email", {
+      const { data, error: emailError } = await supabase.functions.invoke("send-contact-email", {
         body: { name: form.name, email: form.email, phone: form.phone, company: form.company, message: form.message },
       });
+      if (emailError || data?.success === false) throw emailError ?? new Error("Contact email failed");
 
       setSubmitted(true);
     } catch (err) {
       console.error(err);
-      // Still show success so user isn't left hanging
-      setSubmitted(true);
+      setSubmitError("We could not send your message. Please email aniket@ziiro.work or govind@ziiro.work directly.");
     } finally {
       setLoading(false);
     }
@@ -65,6 +56,11 @@ const Contact = () => {
   if (submitted) {
     return (
       <div className="relative min-h-screen flex items-center justify-center px-6" style={{ zIndex: 1 }}>
+        <SEO
+          title="Message Sent"
+          description="Thanks for contacting Ziiro AI. We'll reply within 24 hours."
+          canonical="/contact"
+        />
         <AnimatedSection>
           <div className="text-center">
             <div className="display-font text-[8rem] gradient-text leading-none mb-6">&#10003;</div>
@@ -83,8 +79,8 @@ const Contact = () => {
   return (
     <div className="relative" style={{ zIndex: 1 }}>
       <SEO
-        title="Book a Free Consultation - Talk to Ziiro AI"
-        description="Book a free 30-minute call with Ziiro AI. We'll audit your biggest time-wasters and show you exactly how AI fixes them. No commitment required."
+        title="Book a Free Agentic Systems Call - Talk to Ziiro AI"
+        description="Book a free 30-minute call with Ziiro AI. We'll identify the first agentic system worth building for your startup, solo founder workflow, or lean team."
         canonical="/contact"
       />
       <div className="min-h-screen pt-32 pb-28 px-6">
@@ -97,7 +93,7 @@ const Contact = () => {
                 LET&apos;S<br /><span className="gradient-text">TALK.</span>
               </h1>
               <p className="text-white/45 text-lg leading-relaxed mb-12">
-                Free 30-minute consultation. We&apos;ll audit your biggest time-wasters and show you exactly how AI fixes them.
+                Free 30-minute consultation. We&apos;ll identify the first agentic system worth building for your business.
               </p>
 
               <div className="space-y-4">
@@ -105,7 +101,7 @@ const Contact = () => {
                   <span className="text-[#A8B4C8]">&#10003;</span> No commitment required
                 </div>
                 <div className="flex items-center gap-3 text-white/45 text-sm">
-                  <span className="text-[#A8B4C8]">&#10003;</span> Clear, actionable takeaways
+                  <span className="text-[#A8B4C8]">&#10003;</span> Clear agentic systems roadmap
                 </div>
                 <div className="flex items-center gap-3 text-white/45 text-sm">
                   <span className="text-[#A8B4C8]">&#10003;</span> Response within 24 hours
@@ -172,7 +168,7 @@ const Contact = () => {
                 <div>
                   <textarea
                     className={`${inputClass} min-h-[140px] resize-none`}
-                    placeholder="What's your biggest operational bottleneck right now?"
+                    placeholder="What workflow, outreach loop, or team bottleneck should an agent handle first?"
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                   />
@@ -200,6 +196,7 @@ const Contact = () => {
                 >
                   {loading ? "Sending..." : "Send Message"}
                 </button>
+                {submitError && <p className="text-xs text-[#A8B4C8] leading-relaxed">{submitError}</p>}
               </form>
             </AnimatedSection>
 

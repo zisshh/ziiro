@@ -1,97 +1,97 @@
 import { Link } from "react-router-dom";
 import SEO from "@/components/SEO";
-import { Mail, Video, GitBranch, Users, PenLine } from "lucide-react";
+import { Bot, BrainCircuit, MailCheck, UserCheck, Workflow } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
 
 const services = [
   {
-    icon: Mail,
-    name: "Cold Outreach",
-    outcome: "More booked calls",
-    desc: "Hyper-personalised email and LinkedIn sequences that land in inboxes, not spam — and get replies. We build, launch, and manage your entire outbound engine.",
+    icon: Bot,
+    name: "Agentic Systems",
+    outcome: "Custom AI operators",
+    desc: "We build agents that solve real business workflows: research, routing, follow-ups, reporting, decision support, and repetitive ops that should not live in a founder's head.",
   },
   {
-    icon: Video,
-    name: "UGC Ads & Management",
-    outcome: "Lower CAC, higher ROAS",
-    desc: "We source creators, produce UGC-style ads, and manage your paid campaigns across Meta and TikTok. Creative that converts, handled end to end.",
+    icon: MailCheck,
+    name: "Self-Optimizing Outreach",
+    outcome: "Sequences that learn",
+    desc: "We build cold-email and referral systems that track replies, learn which angles work, and improve the next sequence automatically instead of guessing forever.",
   },
   {
-    icon: GitBranch,
-    name: "Pipeline Automation",
-    outcome: "Zero leads fall through",
-    desc: "Automated follow-ups, CRM updates, and deal-stage triggers so your pipeline runs itself. No more manual data entry or missed opportunities.",
+    icon: Workflow,
+    name: "Workflow Automation",
+    outcome: "Less manual ops",
+    desc: "We connect CRM updates, follow-ups, dashboards, handoffs, approvals, and reporting into one reliable operating system your team can actually run.",
   },
   {
-    icon: Users,
-    name: "Lead Generation",
-    outcome: "Qualified leads daily",
-    desc: "We build targeted prospect lists and multi-channel flows that deliver sales-ready leads on autopilot. Your team closes — we fill the top of funnel.",
+    icon: BrainCircuit,
+    name: "AI Strategy Sprint",
+    outcome: "Know what to build",
+    desc: "We map your team, stack, and bottlenecks into a focused AI roadmap. No random tools, no black-box pitch — just the highest-leverage system to build first.",
   },
   {
-    icon: PenLine,
-    name: "Social Content",
-    outcome: "Always-on presence",
-    desc: "Scroll-stopping posts, carousels, and short-form video content that builds your brand every day. Consistent output without the content team overhead.",
+    icon: UserCheck,
+    name: "Role Analyzer",
+    outcome: "People in the right seats",
+    desc: "A people-fit diagnostic for founder-led teams: understand what each person should own, where they are miscast, and how to redesign roles for throughput.",
   },
 ];
 
 const orbitalData = [
   {
     id: 1,
-    title: "Cold Outreach",
-    date: "More booked calls",
-    content: "Hyper-personalised email and LinkedIn sequences that land in inboxes, not spam — and get replies.",
-    category: "Outreach",
-    icon: Mail,
+    title: "Agentic Systems",
+    date: "Custom AI operators",
+    content: "Agents for research, routing, reporting, follow-ups, and repeated decisions.",
+    category: "Agents",
+    icon: Bot,
     relatedIds: [3, 4],
+    status: "completed" as const,
+    energy: 96,
+  },
+  {
+    id: 2,
+    title: "Self-Optimizing Outreach",
+    date: "Sequences that learn",
+    content: "Outreach loops that track replies and improve automatically over time.",
+    category: "Growth",
+    icon: MailCheck,
+    relatedIds: [1, 3],
+    status: "completed" as const,
+    energy: 94,
+  },
+  {
+    id: 3,
+    title: "Workflow Automation",
+    date: "Less manual ops",
+    content: "CRM, dashboards, handoffs, approvals, and reporting connected into one system.",
+    category: "Automation",
+    icon: Workflow,
+    relatedIds: [1, 2, 4],
     status: "completed" as const,
     energy: 92,
   },
   {
-    id: 2,
-    title: "UGC Ads & Management",
-    date: "Lower CAC, higher ROAS",
-    content: "We source creators, produce UGC-style ads, and manage your paid campaigns across Meta and TikTok.",
-    category: "Ads",
-    icon: Video,
-    relatedIds: [4],
+    id: 4,
+    title: "AI Strategy Sprint",
+    date: "Know what to build",
+    content: "A focused roadmap for the highest-leverage agentic system to ship first.",
+    category: "Consulting",
+    icon: BrainCircuit,
+    relatedIds: [1, 3, 5],
     status: "completed" as const,
     energy: 88,
   },
   {
-    id: 3,
-    title: "Pipeline Automation",
-    date: "Zero leads fall through",
-    content: "Automated follow-ups, CRM updates, and deal-stage triggers so your pipeline runs itself.",
-    category: "Automation",
-    icon: GitBranch,
-    relatedIds: [1, 4],
-    status: "completed" as const,
-    energy: 95,
-  },
-  {
-    id: 4,
-    title: "Lead Generation",
-    date: "Qualified leads daily",
-    content: "We build targeted prospect lists and multi-channel flows that deliver sales-ready leads on autopilot.",
-    category: "Growth",
-    icon: Users,
-    relatedIds: [1, 2, 3],
-    status: "completed" as const,
-    energy: 90,
-  },
-  {
     id: 5,
-    title: "Social Content",
-    date: "Always-on presence",
-    content: "Scroll-stopping posts, carousels, and short-form video content that builds your brand every day.",
-    category: "Content",
-    icon: PenLine,
-    relatedIds: [2, 4],
+    title: "Role Analyzer",
+    date: "People in the right seats",
+    content: "A diagnostic for matching people to the work they should actually own.",
+    category: "People Ops",
+    icon: UserCheck,
+    relatedIds: [3, 4],
     status: "completed" as const,
-    energy: 85,
+    energy: 86,
   },
 ];
 
@@ -99,8 +99,8 @@ const Services = () => {
   return (
     <div className="relative" style={{ zIndex: 1 }}>
       <SEO
-        title="Our Services - Cold Outreach, Lead Gen, Pipeline Automation and More"
-        description="Five AI-powered services: cold outreach, UGC ads, pipeline automation, lead generation, and social content. One system built to grow your pipeline on autopilot."
+        title="Our Services - Agentic Systems, Self-Optimizing Outreach, Workflow Automation"
+        description="Ziiro builds agentic AI systems, self-optimizing outreach loops, workflow automations, AI strategy sprints, and role diagnostics for lean teams."
         canonical="/services"
       />
 
@@ -116,7 +116,7 @@ const Services = () => {
                 WHAT<br /><span className="gradient-text">WE DO.</span>
               </h1>
               <p className="text-white/45 text-lg max-w-md leading-relaxed mb-8">
-                Five services. One system. Built to grow your pipeline on autopilot.
+                Five agentic offers. One direction: turn repeated work into systems that learn.
               </p>
               <p className="text-white/20 text-xs tracking-widest uppercase">
                 Click any service node
@@ -183,7 +183,7 @@ const Services = () => {
                 NOT SURE WHERE TO START?
               </h2>
               <p className="text-white/45 mb-8">
-                Book a free call. We'll tell you exactly where AI will move the needle for your business.
+                Book a free call. We'll identify the first agentic system worth building for your business.
               </p>
               <Link to="/contact" className="btn-primary-gradient font-bold inline-block">
                 Book Free Consultation

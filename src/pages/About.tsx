@@ -1,26 +1,30 @@
 import AnimatedSection from "@/components/AnimatedSection";
 import GlassCard from "@/components/GlassCard";
+import SEO from "@/components/SEO";
 
 const steps = [
-  { num: "01", title: "Discovery Call", time: "Free · 30–45 min", desc: "We learn your business, pain points, and goals. No pitch, just listening." },
-  { num: "02", title: "Assessment & Strategy", time: "1–2 weeks", desc: "We audit your processes and design a laser-focused AI automation roadmap." },
-  { num: "03", title: "Design & Planning", time: "1–2 weeks", desc: "Detailed technical architecture and solution planning — no surprises later." },
-  { num: "04", title: "Development & Testing", time: "2–6 weeks", desc: "We build, test relentlessly, and refine until everything runs perfectly." },
-  { num: "05", title: "Deployment", time: "1–2 weeks", desc: "Seamless rollout with zero downtime, full monitoring, and handoff support." },
-  { num: "06", title: "Training & Support", time: "Ongoing", desc: "Comprehensive team training and continuous optimisation as you scale." },
+  { num: "01", title: "Systems Audit", time: "Free · 30 min", desc: "We map the repeated work, owner bottlenecks, and decision loops that should become agents." },
+  { num: "02", title: "Agent Blueprint", time: "1–2 weeks", desc: "A practical architecture for the agents, tools, data, feedback loops, and guardrails." },
+  { num: "03", title: "Build & Connect", time: "2–6 weeks", desc: "We connect the system into your stack: outreach, CRM, dashboards, internal ops, and role clarity." },
+  { num: "04", title: "Measure & Improve", time: "Ongoing", desc: "We track the outcomes that matter and tune the system so it gets sharper over time." },
 ];
 
 const values = [
-  { icon: "🔬", title: "Innovation First", desc: "We push the boundary of what AI can do for your business — every engagement." },
-  { icon: "📈", title: "Client Success", desc: "Your ROI is our scoreboard. We don't win unless you win." },
-  { icon: "🔍", title: "Transparency", desc: "Clear timelines, honest pricing, and no black-box solutions." },
+  { icon: "01", title: "Agentic First", desc: "We focus on systems that can act, measure outcomes, and improve — not one-off content tasks." },
+  { icon: "02", title: "Founder Leverage", desc: "The goal is to remove work from founders and tiny teams without adding management overhead." },
+  { icon: "03", title: "Clear Control", desc: "No black boxes. You should know what the agent does, when it acts, and how performance is measured." },
 ];
 
-const industries = ["E-commerce", "Real Estate", "Healthcare", "Finance", "SaaS", "Professional Services"];
+const industries = ["Startups", "Solo Founders", "Founder-led Agencies", "SaaS", "Lean Service Teams", "Communities"];
 
 const About = () => {
   return (
     <div className="relative" style={{ zIndex: 1 }}>
+      <SEO
+        title="About Ziiro - Founder-Led Agentic AI Studio"
+        description="Ziiro is a founder-led AI studio building agentic systems, self-optimizing outreach, workflow automation, and role diagnostics for lean teams."
+        canonical="/about"
+      />
       <div className="min-h-screen pt-32 pb-28 px-6">
         <div className="container mx-auto">
 
@@ -33,7 +37,7 @@ const About = () => {
               ABOUT <span className="gradient-text">ZIIRO</span>
             </h1>
             <p className="text-center text-white/45 max-w-2xl mx-auto mb-20">
-              We're a team of AI engineers and automation specialists on a mission to make intelligent automation accessible to every business — not just the Fortune 500.
+              Ziiro is a founder-led AI studio building agentic systems for startups, solo founders, and lean teams that need leverage before they can afford headcount.
             </p>
           </AnimatedSection>
 
@@ -42,7 +46,7 @@ const About = () => {
               <GlassCard hover={false} className="h-full">
                 <p className="section-label mb-4">Our Mission</p>
                 <p className="text-white/65 leading-relaxed mb-6">
-                  To democratize AI automation and empower businesses of all sizes to operate at peak efficiency. We combine deep technical expertise with business acumen to deliver solutions that generate real, measurable ROI.
+                  To turn repeated work into self-improving systems. We build agents, outreach loops, workflow automations, and role diagnostics that help small teams operate with more clarity and less manual drag.
                 </p>
                 <div
                   className="glass rounded-xl p-5"
@@ -102,7 +106,7 @@ const About = () => {
           </div>
 
           <AnimatedSection>
-            <p className="section-label text-center mb-6">Industries we serve</p>
+            <p className="section-label text-center mb-6">Who we serve</p>
             <div className="flex flex-wrap justify-center gap-3">
               {industries.map((ind) => (
                 <span key={ind} className="glass px-6 py-2.5 rounded-full text-sm text-white/65 font-medium">

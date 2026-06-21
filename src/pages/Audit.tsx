@@ -21,7 +21,7 @@ const validateEmail = (email: string): { valid: boolean; message: string } => {
   const trimmed = email.trim();
   if (!trimmed) return { valid: false, message: "" };
 
-  const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (!regex.test(trimmed)) return { valid: false, message: "Enter a valid email address" };
 
   const domain = trimmed.split("@")[1]?.toLowerCase();
@@ -38,52 +38,50 @@ const validateEmail = (email: string): { valid: boolean; message: string } => {
 const painAreas = [
   {
     key: "outreach",
-    label: "Sales Outreach",
-    sub: "Email, LinkedIn, Follow-ups",
-    recommendation: "Automated personalised sequences and AI-assisted follow-ups can run 24/7 without your team lifting a finger — filling your calendar consistently.",
+    label: "Self-Optimizing Outreach",
+    sub: "Email, referrals, follow-ups",
+    recommendation: "A reply-tracking outreach loop can test angles, learn what gets responses, and improve your next sequence without guessing forever.",
     hrsPerRating: [0, 0.5, 1.5, 3.5, 5.5, 8],
   },
   {
     key: "leadgen",
-    label: "Lead Generation",
-    sub: "Prospecting, Qualifying, Lists",
-    recommendation: "AI prospecting tools can identify, research, and qualify leads automatically — delivering a ready list of high-fit contacts to your team every morning.",
+    label: "Research & Qualification",
+    sub: "Prospecting, scoring, context",
+    recommendation: "Research agents can identify, enrich, and qualify high-fit leads so founders spend time on conversations instead of list-building.",
     hrsPerRating: [0, 0.5, 1.5, 3, 5, 7.5],
   },
   {
     key: "pipeline",
-    label: "Pipeline Management",
-    sub: "CRM, Deals, Reporting",
-    recommendation: "Automated CRM updates, deal-stage triggers, and weekly reporting dashboards eliminate manual data entry and ensure no lead ever falls through the cracks.",
+    label: "Workflow Automation",
+    sub: "CRM, handoffs, reporting",
+    recommendation: "Agentic workflow automation can update systems, trigger handoffs, and summarize what matters without turning your team into data-entry workers.",
     hrsPerRating: [0, 0.3, 1, 2.5, 4, 6],
   },
   {
     key: "content",
-    label: "Content & Social",
-    sub: "Posts, Ads, Creative",
-    recommendation: "An AI content system can generate, schedule, and publish consistent posts across all channels — keeping your brand active without a dedicated content team.",
+    label: "Role Clarity",
+    sub: "Owners, strengths, bottlenecks",
+    recommendation: "A role analyzer can reveal who should own which work, where people are miscast, and which responsibilities should move to agents.",
     hrsPerRating: [0, 0.5, 1.5, 3, 4.5, 6.5],
   },
   {
     key: "reporting",
-    label: "Reporting & Analytics",
-    sub: "Dashboards, Insights, Reviews",
-    recommendation: "Automated reporting pulls live data from all your tools into a single dashboard — giving you a clear picture of performance in 5 minutes, not 5 hours.",
+    label: "Control Dashboards",
+    sub: "Metrics, insights, reviews",
+    recommendation: "A simple command dashboard can show what your agents did, what worked, what failed, and where a human needs to approve next.",
     hrsPerRating: [0, 0.3, 0.8, 2, 3.5, 5],
   },
 ];
 
 const industries = [
   "SaaS / Software",
-  "E-commerce / Retail",
-  "Real Estate",
-  "Marketing Agency",
+  "Startup",
+  "Solo Founder",
+  "Founder-led Agency",
   "Consulting / Professional Services",
-  "Finance / Fintech",
-  "Healthcare",
-  "Education",
-  "Manufacturing",
-  "HVAC",
+  "Creator-led Business",
+  "Community / Education",
+  "AI-first Service Business",
   "Other",
 ];
 
@@ -118,6 +116,7 @@ const Audit = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitError, setSubmitError] = useState("");
   const [emailStatus, setEmailStatus] = useState<{ valid: boolean; message: string } | null>(null);
   const [emailChecking, setEmailChecking] = useState(false);
   const emailDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -130,7 +129,7 @@ const Audit = () => {
     script.src = "https://assets.calendly.com/assets/external/widget.js";
     script.async = true;
     document.body.appendChild(script);
-    return () => { document.body.removeChild(script); };
+    return () => { script.parentNode?.removeChild(script); };
   }, [submitted]);
 
   useEffect(() => {
@@ -155,24 +154,21 @@ const Audit = () => {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
-    const result = calcResults(ratings, form.size);
+    setSubmitError("");
     try {
-      await supabase.functions.invoke("send-audit-email", {
+      const { data, error } = await supabase.functions.invoke("send-audit-email", {
         body: {
           name: form.name,
           email: form.email,
           industry: form.industry,
           size: form.size,
           ratings,
-          score: result.score,
-          urgency: result.totalHrs >= 15 ? "Critical" : result.totalHrs >= 8 ? "High" : "Moderate",
-          savings: `${result.totalHrs} hrs/week`,
-          roi: `$${result.totalAnnual.toLocaleString()}/yr`,
-          topAreas: result.sorted.slice(0, 2).map((a) => a.label),
         },
       });
+      if (error || data?.success === false) throw error ?? new Error("Audit email failed");
     } catch (err) {
       console.error("Audit email error:", err);
+      setSubmitError("Your results are ready, but we could not email them. You can still book the strategy call below.");
     } finally {
       setLoading(false);
       setSubmitted(true);
@@ -187,8 +183,8 @@ const Audit = () => {
   return (
     <div className="relative" style={{ zIndex: 1 }}>
       <SEO
-        title="Free AI Readiness Audit - Find Your Automation Gaps"
-        description="Take our free AI Readiness Audit and discover exactly how many hours and dollars your business is leaving on the table. Get your personalised automation roadmap instantly."
+        title="Free Agentic Systems Audit - Find Your Agentic Leverage"
+        description="Take Ziiro's free Agentic Systems Audit and discover where agents, self-optimizing outreach, workflow automation, and role diagnostics can create leverage."
         canonical="/audit"
       />
       <div className="min-h-screen pt-28 pb-24 px-6">
@@ -201,10 +197,10 @@ const Audit = () => {
                 Free Assessment
               </span>
               <h1 className="display-font text-white leading-none mb-4" style={{ fontSize: "clamp(2.8rem, 6vw, 5.5rem)" }}>
-                AI READINESS<br /><span className="gradient-text">AUDIT</span>
+                AGENTIC SYSTEMS<br /><span className="gradient-text">AUDIT</span>
               </h1>
               <p className="text-white/45 text-sm max-w-md leading-relaxed">
-                Find out exactly how much time and money your business is leaving on the table. Get your personalised AI automation roadmap instantly.
+                Find where your business needs agents, self-improving outreach, workflow automation, and clearer roles. Get a practical leverage roadmap instantly.
               </p>
             </div>
           </AnimatedSection>
@@ -429,12 +425,18 @@ const Audit = () => {
                     <p className="text-white/40 text-xs tracking-widest uppercase mt-1 mb-4">Annual Value</p>
 
                     <p className="text-white/30 text-xs italic mb-8">
-                      Companies your size typically reclaim {Math.round(results!.totalHrs * 0.8)}–{Math.round(results!.totalHrs * 1.35)} hours/week with AI automation.
+                      Companies your size typically reclaim {Math.round(results!.totalHrs * 0.8)}–{Math.round(results!.totalHrs * 1.35)} hours/week with agentic systems.
                     </p>
                   </div>
 
+                  {submitError && (
+                    <div className="mb-8 rounded-lg border border-[#A8B4C8]/30 bg-[#A8B4C8]/10 px-4 py-3 text-xs leading-relaxed text-white/60">
+                      {submitError}
+                    </div>
+                  )}
+
                   <div className="border-t border-white/[0.06] pt-8 mb-8">
-                    <p className="section-label mb-5">Priority Automations</p>
+                    <p className="section-label mb-5">Priority Systems</p>
                     <div className="space-y-3">
                       {results!.sorted.map((area, i) => (
                         <div key={area.key} className="flex items-start gap-3">
@@ -482,7 +484,7 @@ const Audit = () => {
                       BOOK YOUR FREE<br /><span className="gradient-text">STRATEGY CALL</span>
                     </h2>
                     <p className="text-white/40 text-sm max-w-md mx-auto">
-                      30 minutes. We&apos;ll walk you through exactly how to automate your top pain areas and what it would look like for your business.
+                      30 minutes. We&apos;ll walk you through the first agentic system worth building and what it would look like for your business.
                     </p>
                   </div>
                   <div

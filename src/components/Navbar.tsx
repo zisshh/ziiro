@@ -8,14 +8,17 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const scrollBehavior = () =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+
   const handleResults = () => {
     setOpen(false);
     if (location.pathname === "/") {
-      document.getElementById("results")?.scrollIntoView({ behavior: "smooth" });
+      document.getElementById("results")?.scrollIntoView({ behavior: scrollBehavior() });
     } else {
       navigate("/");
       setTimeout(() => {
-        document.getElementById("results")?.scrollIntoView({ behavior: "smooth" });
+        document.getElementById("results")?.scrollIntoView({ behavior: scrollBehavior() });
       }, 400);
     }
   };
@@ -40,9 +43,13 @@ const Navbar = () => {
       <div className="w-full px-4 flex items-center justify-between">
         <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
           <img
-            src="/logo/ziiro-logo.png"
+            src="/logo/ziiro-logo-small.webp"
             alt="Ziiro"
-            style={{ height: "64px", width: "auto", mixBlendMode: "lighten", filter: "brightness(3)" }}
+            width="96"
+            height="64"
+            decoding="async"
+            fetchPriority="high"
+            style={{ height: "64px", width: "auto" }}
           />
         </Link>
 
@@ -60,7 +67,7 @@ const Navbar = () => {
             onClick={handleResults}
             className="text-sm font-medium tracking-wide transition-colors text-white/55 hover:text-white"
           >
-            RESULTS
+            FOCUS
           </button>
           <Link
             to="/audit"
@@ -84,7 +91,7 @@ const Navbar = () => {
       {open && (
         <div className="md:hidden glass-nav mt-2 mx-4 rounded-xl p-6 flex flex-col gap-5">
           <Link to="/services" className="text-base font-medium text-white/80">Services</Link>
-          <button onClick={handleResults} className="text-base font-medium text-white/80 text-left">Results</button>
+          <button onClick={handleResults} className="text-base font-medium text-white/80 text-left">Focus</button>
           <Link to="/audit" className="text-base font-medium text-white/80">Free Audit</Link>
           <Link to="/contact" className="btn-primary-gradient text-center text-sm font-bold mt-1">
             Book a Call
