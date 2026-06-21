@@ -168,7 +168,7 @@ const Contact = () => {
                 <div>
                   <textarea
                     className={`${inputClass} min-h-[140px] resize-none`}
-                    placeholder="What workflow, outreach loop, or team bottleneck should an agent handle first?"
+                    placeholder="What workflow, website, marketing loop, or team bottleneck should an agent improve first?"
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                   />

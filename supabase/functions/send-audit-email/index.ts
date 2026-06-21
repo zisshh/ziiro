@@ -39,7 +39,7 @@ const corsHeaders = (req: Request) => {
 };
 
 const ratingLabels: Record<string, string> = {
-  outreach: 'Self-Optimizing Outreach',
+  outreach: 'Self-Optimizing Systems',
   leadgen: 'Research & Qualification',
   pipeline: 'Workflow Automation',
   content: 'Role Clarity',

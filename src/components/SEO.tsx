@@ -12,7 +12,7 @@ const DEFAULT_OG = `${BASE_URL}/og-image.jpeg`;
 
 const SEO = ({ title, description, canonical, ogImage = DEFAULT_OG }: SEOProps) => {
   const fullTitle = title ? `${title} | Ziiro AI` : "Ziiro AI - Agentic AI Systems for Startups and Solo Founders";
-  const desc = description || "Ziiro builds agentic AI systems, self-optimizing outreach loops, workflow automations, and role diagnostics for lean teams.";
+  const desc = description || "Ziiro builds agentic AI systems, self-optimizing marketing, outreach, website, and workflow loops, plus role diagnostics for lean teams.";
   const url = canonical ? `${BASE_URL}${canonical}` : BASE_URL;
 
   return (

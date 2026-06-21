@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import SEO from "@/components/SEO";
-import { Bot, BrainCircuit, MailCheck, UserCheck, Workflow } from "lucide-react";
+import { Bot, BrainCircuit, RefreshCw, UserCheck, Workflow } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
 
@@ -12,10 +12,10 @@ const services = [
     desc: "We build agents that solve real business workflows: research, routing, follow-ups, reporting, decision support, and repetitive ops that should not live in a founder's head.",
   },
   {
-    icon: MailCheck,
-    name: "Self-Optimizing Outreach",
-    outcome: "Sequences that learn",
-    desc: "We build cold-email and referral systems that track replies, learn which angles work, and improve the next sequence automatically instead of guessing forever.",
+    icon: RefreshCw,
+    name: "Self-Optimizing Systems",
+    outcome: "Feedback loops that learn",
+    desc: "We build marketing, outreach, website, and workflow loops that track outcomes, learn what works, and improve automatically instead of guessing forever.",
   },
   {
     icon: Workflow,
@@ -51,11 +51,11 @@ const orbitalData = [
   },
   {
     id: 2,
-    title: "Self-Optimizing Outreach",
-    date: "Sequences that learn",
-    content: "Outreach loops that track replies and improve automatically over time.",
-    category: "Growth",
-    icon: MailCheck,
+    title: "Self-Optimizing Systems",
+    date: "Feedback loops that learn",
+    content: "Marketing, outreach, website, and workflow loops that improve automatically over time.",
+    category: "Optimization",
+    icon: RefreshCw,
     relatedIds: [1, 3],
     status: "completed" as const,
     energy: 94,
@@ -99,8 +99,8 @@ const Services = () => {
   return (
     <div className="relative" style={{ zIndex: 1 }}>
       <SEO
-        title="Our Services - Agentic Systems, Self-Optimizing Outreach, Workflow Automation"
-        description="Ziiro builds agentic AI systems, self-optimizing outreach loops, workflow automations, AI strategy sprints, and role diagnostics for lean teams."
+        title="Our Services - Agentic Systems, Self-Optimizing Systems, Workflow Automation"
+        description="Ziiro builds agentic AI systems, self-optimizing marketing, outreach, website, and workflow loops, AI strategy sprints, and role diagnostics for lean teams."
         canonical="/services"
       />
 
@@ -118,9 +118,6 @@ const Services = () => {
               <p className="text-white/45 text-lg max-w-md leading-relaxed mb-8">
                 Five agentic offers. One direction: turn repeated work into systems that learn.
               </p>
-              <p className="text-white/20 text-xs tracking-widest uppercase">
-                Click any service node
-              </p>
             </AnimatedSection>
           </div>
 
@@ -132,9 +129,15 @@ const Services = () => {
               background: "linear-gradient(to right, transparent 0%, #060610 18%)",
             }}
           >
-            <div style={{ position: "absolute", inset: 0 }}>
+            <div style={{ position: "absolute", inset: 0, zIndex: 1 }}>
               <RadialOrbitalTimeline timelineData={orbitalData} />
             </div>
+            <p
+              className="pointer-events-none absolute left-1/2 -translate-x-1/2 text-white/35 text-xs tracking-widest uppercase"
+              style={{ top: "min(calc(50% + 270px), calc(100% - 56px))", zIndex: 0 }}
+            >
+              Click any service node
+            </p>
           </div>
 
         </div>
@@ -143,6 +146,9 @@ const Services = () => {
         <div className="lg:hidden w-full" style={{ height: "420px" }}>
           <RadialOrbitalTimeline timelineData={orbitalData} />
         </div>
+        <p className="lg:hidden pb-8 text-center text-white/35 text-xs tracking-widest uppercase">
+          Click any service node
+        </p>
       </section>
 
       {/* SERVICE LIST */}

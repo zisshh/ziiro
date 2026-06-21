@@ -7,7 +7,7 @@
 
 ## What is Ziiro?
 
-Ziiro builds agentic AI systems for startups, solo founders, and lean teams. We turn repeated work into agents, self-optimizing outreach loops, workflow automations, and role diagnostics so founders can get leverage before they can afford headcount.
+Ziiro builds agentic AI systems for startups, solo founders, and lean teams. We turn repeated work into agents, self-optimizing marketing, outreach, website, and workflow loops, plus role diagnostics so founders can get leverage before they can afford headcount.
 
 The company direction is agentic AI consultancy and productized systems for lean, founder-led teams.
 
@@ -18,7 +18,7 @@ The company direction is agentic AI consultancy and productized systems for lean
 | Service | Outcome |
 |---|---|
 | **Agentic Systems** | Custom AI operators for research, routing, reporting, follow-ups, and repeated decisions |
-| **Self-Optimizing Outreach** | Cold-email/referral loops that track replies and improve future sequences automatically |
+| **Self-Optimizing Systems** | Marketing, outreach, website, and workflow loops that track outcomes and improve automatically |
 | **Workflow Automation** | CRM updates, handoffs, dashboards, approvals, and reporting connected into one operating system |
 | **AI Strategy Sprint** | A focused roadmap for the highest-leverage agentic system to build first |
 | **Role Analyzer** | A diagnostic that maps people to the work they should own and identifies role bottlenecks |

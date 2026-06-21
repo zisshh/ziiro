@@ -38,9 +38,9 @@ const validateEmail = (email: string): { valid: boolean; message: string } => {
 const painAreas = [
   {
     key: "outreach",
-    label: "Self-Optimizing Outreach",
-    sub: "Email, referrals, follow-ups",
-    recommendation: "A reply-tracking outreach loop can test angles, learn what gets responses, and improve your next sequence without guessing forever.",
+    label: "Self-Optimizing Systems",
+    sub: "Marketing, outreach, website, ops",
+    recommendation: "A self-optimizing loop can test marketing angles, outreach, website changes, and workflow improvements, then learn from outcomes without guessing forever.",
     hrsPerRating: [0, 0.5, 1.5, 3.5, 5.5, 8],
   },
   {
@@ -184,7 +184,7 @@ const Audit = () => {
     <div className="relative" style={{ zIndex: 1 }}>
       <SEO
         title="Free Agentic Systems Audit - Find Your Agentic Leverage"
-        description="Take Ziiro's free Agentic Systems Audit and discover where agents, self-optimizing outreach, workflow automation, and role diagnostics can create leverage."
+        description="Take Ziiro's free Agentic Systems Audit and discover where agents, self-optimizing marketing, outreach, website, and workflow loops, plus role diagnostics, can create leverage."
         canonical="/audit"
       />
       <div className="min-h-screen pt-28 pb-24 px-6">
@@ -200,7 +200,7 @@ const Audit = () => {
                 AGENTIC SYSTEMS<br /><span className="gradient-text">AUDIT</span>
               </h1>
               <p className="text-white/45 text-sm max-w-md leading-relaxed">
-                Find where your business needs agents, self-improving outreach, workflow automation, and clearer roles. Get a practical leverage roadmap instantly.
+                Find where your business needs agents, self-improving growth loops, workflow automation, website optimization, and clearer roles. Get a practical leverage roadmap instantly.
               </p>
             </div>
           </AnimatedSection>

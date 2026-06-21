@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import SEO from "@/components/SEO";
-import { Bot, BrainCircuit, MailCheck, UserCheck, Workflow } from "lucide-react";
+import { Bot, BrainCircuit, RefreshCw, UserCheck, Workflow } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import DeferredDottedSurface from "@/components/DeferredDottedSurface";
 import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
@@ -26,11 +26,11 @@ const servicesData = [
   },
   {
     id: 2,
-    title: "Self-Optimizing Outreach",
-    date: "Sequences that learn",
-    content: "Cold-email and referral loops that track replies, score what works, and improve the next sequence automatically.",
-    category: "Growth",
-    icon: MailCheck,
+    title: "Self-Optimizing Systems",
+    date: "Feedback loops that learn",
+    content: "Marketing, outreach, website, and workflow loops that track outcomes and improve automatically over time.",
+    category: "Optimization",
+    icon: RefreshCw,
     relatedIds: [1, 3],
     status: "completed" as const,
     energy: 94,
@@ -79,7 +79,7 @@ const Home = () => {
       <DeferredDottedSurface />
       <SEO
         title="Agentic AI Systems for Startups and Solo Founders"
-        description="Ziiro builds agentic AI systems, self-optimizing outreach loops, workflow automations, and role diagnostics for startups and solo founders."
+        description="Ziiro builds agentic AI systems, self-optimizing marketing, outreach, website, and workflow loops, plus role diagnostics for startups and solo founders."
         canonical="/"
       />
 
@@ -116,9 +116,6 @@ const Home = () => {
                 </button>
               </div>
 
-              <p className="mt-8 text-white/20 text-xs tracking-widest uppercase">
-                Click any service node
-              </p>
             </AnimatedSection>
           </div>
 
@@ -130,9 +127,15 @@ const Home = () => {
               background: "linear-gradient(to right, transparent 0%, #060610 18%)",
             }}
           >
-            <div style={{ position: "absolute", inset: 0 }}>
+            <div style={{ position: "absolute", inset: 0, zIndex: 1 }}>
               <RadialOrbitalTimeline timelineData={servicesData} />
             </div>
+            <p
+              className="pointer-events-none absolute left-1/2 -translate-x-1/2 text-white/35 text-xs tracking-widest uppercase"
+              style={{ top: "min(calc(50% + 270px), calc(100% - 56px))", zIndex: 0 }}
+            >
+              Click any service node
+            </p>
           </div>
 
         </div>
@@ -183,7 +186,7 @@ const Home = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-px mb-16" style={{ background: "rgba(255,255,255,0.06)" }}>
             {[
               { value: "Agents", label: "Core offer", sub: "Custom AI operators for real workflows, not surface-level automation" },
-              { value: "Loops", label: "Differentiator", sub: "Outreach and ops systems that track outcomes and improve over time" },
+              { value: "Loops", label: "Differentiator", sub: "Marketing, website, outreach, and ops systems that track outcomes and improve over time" },
               { value: "Founders", label: "Primary ICP", sub: "Startups, solo founders, and lean teams that need leverage fast" },
               { value: "Roles", label: "People fit", sub: "Diagnostics that help each person own the work they are best built for" },
             ].map((m, i) => (
